@@ -1,0 +1,305 @@
+syntaxVersion: 6 # version of this config file syntax
+
+# P2(S|L)(TR|VL)[0-9]{2}
+databaseId: P2LXM00
+
+# type: (short|long)
+type: long
+
+# segmentDuration: <segment-duration> # in seconds
+segmentDuration: 2
+
+# qualityLevelList:
+#     <quality-level-id>:
+#         index        : <index>
+#         videoCodec   : (h264|h265|vp9)
+#         videoBitrate : <bitrate>, # in kBit/s
+#         width        : <width>
+#         height       : <height>
+#         fps          : (original|24/25/30|50/60|<fraction>|<fps>)
+#                      # original: don't change FPS, or download with highest framerate for online services
+#                      # 24/25/30 or 50/60: adaptive to SRC framerate
+#                      # <fraction>: must contain a "/"
+#                      # <fps>: in Hz
+
+qualityLevelList:
+    # H.264 Adaptive Streaming Set
+    Q0:
+        index        : 0
+        videoCodec   : h264
+        videoBitrate : 1000
+        width        : 384
+        height       : 216
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q1:
+        index        : 1
+        videoCodec   : h264
+        videoBitrate : 500
+        width        : 192
+        height       : 108
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q2:
+        index        : 0
+        videoCodec   : h264
+        videoBitrate : 100
+        width        : 128
+        height       : 72
+        fps          : 24/25/30
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q3:
+        index        : 0
+        videoCodec   : h264
+        videoBitrate : 50
+        width        : 114
+        height       : 64
+        fps          : 1/2
+        audioCodec   : aac
+        audioBitrate : 320
+
+    # H.265 Adaptive Streaming Set
+    Q4:
+        index        : 0
+        videoCodec   : h265
+        videoBitrate : 1000
+        width        : 384
+        height       : 216
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q5:
+        index        : 1
+        videoCodec   : h265
+        videoBitrate : 500
+        width        : 192
+        height       : 108
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q6:
+        index        : 0
+        videoCodec   : h265
+        videoBitrate : 100
+        width        : 128
+        height       : 72
+        fps          : 24
+        audioCodec   : aac
+        audioBitrate : 320
+
+    Q7:
+        index        : 0
+        videoCodec   : h265
+        videoBitrate : 50
+        width        : 114
+        height       : 64
+        fps          : 1/2
+        audioCodec   : aac
+        audioBitrate : 320
+
+    # VP9 Adaptive Streaming Set
+    Q8:
+        index        : 0
+        videoCodec   : vp9
+        videoBitrate : 1000
+        width        : 384
+        height       : 216
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+
+    Q9:
+        index        : 1
+        videoCodec   : vp9
+        videoBitrate : 500
+        width        : 192
+        height       : 108
+        fps          : original
+        audioCodec   : aac
+        audioBitrate : 320
+
+
+    Q10:
+        index        : 0
+        videoCodec   : vp9
+        videoBitrate : 100
+        width        : 128
+        height       : 72
+        fps          : 24
+        audioCodec   : aac
+        audioBitrate : 320
+
+
+    Q11:
+        index        : 0
+        videoCodec   : vp9
+        videoBitrate : 50
+        width        : 114
+        height       : 64
+        fps          : 1/2
+        audioCodec   : aac
+        audioBitrate : 320
+
+# codingList:
+#     <coding-id>:
+#         type           : (video|audio)
+#         encoder        : (libx264|libx265|libvpx-vp9) or (libfdk_aac|...)
+#         # video only:
+#         passes         : (1|2)
+#         iFrameInterval : <i-frame-interval> # in seconds
+#         bframes        : <number-of-bframes> # optional, only valid for H.264/H.265
+#         scenecut       : <scenecut> # optional, "true" or "false" (default: false)
+#         preset         : <preset> # optional, valid presets for x264, x265, default: "medium"
+#         speed          : <speed> # optional, valid speed for vp9, between 0 and 4, lower is slower, default: 2
+#         quality        : <quality> # optional, valid quality for vp9, "good" or "best", default: "good"
+#         minrateFactor  : <minrate-factor> # optional, e.g. 1 to say that minrate = bitrate (as specified in quality level)
+#         maxrateFactor  : <maxrate-factor> # optional, e.g. 1 to say that maxrate = bitrate (as specified in quality level)
+#         bufsizeFactor  : <bufsize-factor> # optional, e.g. 3 to say that bufsize = 3 * bitrate (as specified in quality level)
+#         ...
+#     ...:
+codingList:
+    # specifies encoding options common to all quality levels of one HRC
+    # other encoder defaults will be set in the scripts, not in the test config
+    VC0 :
+        type           : video
+        encoder        : libx264
+        passes         : 2
+        iFrameInterval : 1
+        scenecut       : false
+        bframes        : 2
+        preset         : veryslow
+        minrateFactor  : 0.5
+        maxrateFactor  : 1
+        bufsizeFactor  : 2
+    VC1 :
+        type           : video
+        encoder        : libx265
+        passes         : 2
+        iFrameInterval : 1
+        scenecut       : false
+        bframes        : 2
+        preset         : veryslow
+        minrateFactor  : 0.5
+        maxrateFactor  : 1
+        bufsizeFactor  : 2
+    VC2 :
+        type           : video
+        encoder        : libvpx-vp9
+        passes         : 2
+        iFrameInterval : 1
+        scenecut       : false
+        bframes        : 2
+        quality        : good
+        speed          : 1
+    AC0 :
+        type           : audio
+        encoder        : libfdk_aac
+
+# srcList:
+#     <src-id>: name.avi
+#     <src-id>:
+#         srcFile : name2.avi
+#         youtubeUrl: https://www.youtube.com/watch?v=ySTQk6updjQ
+#     ...
+srcList:
+    # maps SRC IDs to filenames present in the srcVid folder
+    # if there is a srcFile attribute, there must be a youtubeUrl attribute
+    # as well, which will be looked up for HRC processing
+    # <src-id>:     SRC[0-9]{3}
+    SRC000: 10s-audiovisual.avi
+
+
+pvsList:
+    # implicitly maps SRCs and HRCs to PVSes
+    # <database-id>_<src-id>_<hrc-id>
+    - P2LTR00_SRC000_HRC000
+    - P2LTR00_SRC000_HRC001
+    - P2LTR00_SRC000_HRC002
+    - P2LTR00_SRC000_HRC003
+
+# hrcList:
+#     <hrc-id>:
+#         # "Normal" example
+#         videoCodingId: <coding-id> # explains which kind of encoding will be used for HRC
+#         audioCodingId: <coding-id> # optional, for long tests
+#         segmentDuration: <segment-duration> # optional, overrides test default
+#         eventList:
+#             - [<quality-level-id>, <duration in seconds>]
+#             - [stall, <duration in seconds>]
+#             - ...
+#     <hrc-id>:
+#         # YouTube example for short test
+#         # <youtube-itag>, see: https://github.com/rg3/youtube-dl/blob/master/youtube_dl/extractor/youtube.py
+#         videoCodingId: youtube
+#         eventList:
+#             - [<youtube-itag>, <duration in seconds>]
+#             - ...
+#     ...:
+#         eventList: ...
+hrcList:
+    HRC000:
+        videoCodingId: VC0 # H.264
+        audioCodingId: AC0
+        eventList:
+            - [Q0, 2]
+            - [Q1, 2]
+            - [stall, 3]
+            - [Q2, 2]
+            - [Q3, 2]
+            - [stall, 2]
+            - [Q2, 2]
+    HRC001:
+        videoCodingId: VC1 # H.265
+        audioCodingId: AC0
+        eventList:
+            - [stall, 2]
+            - [Q4, 2]
+            - [Q5, 2]
+            - [Q6, 2]
+            - [Q7, 2]
+            - [stall, 3]
+            - [Q6, 2]
+            
+    HRC002:
+        videoCodingId: VC2 # VP9
+        audioCodingId: AC0
+        eventList:
+            - [Q8, 2]
+            - [Q9, 2]
+            - [stall, 3]
+            - [Q10, 2]
+            - [Q11, 2]
+            - [stall, 2]
+            - [Q10, 2]
+            
+    HRC003: # no stalling
+        videoCodingId: VC2 # VP9
+        audioCodingId: AC0
+        eventList:
+            - [Q8, 2]
+            - [Q9, 4]
+            - [Q11, 2]
+            - [Q10, 2]
+            
+
+# postProcessingList:
+#     - type: (pc|mobile|tablet)
+#       displayHeight: <display height>
+#       displayWidth: <display width>
+#     - ...
+postProcessingList:
+    # list of contexts for which this test should generate PVSes
+    - type: pc
+      codingHeight: 216
+      codingWidth: 384
+      displayHeight: 216
+      displayWidth: 384

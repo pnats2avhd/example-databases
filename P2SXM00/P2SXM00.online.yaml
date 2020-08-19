@@ -1,0 +1,157 @@
+syntaxVersion: 6 # version of this config file syntax
+
+# P2(S|L)(TR|VL)[0-9]{2}
+databaseId: P2STR00
+
+# type: (short|long)
+type: short
+
+# qualityLevelList:
+#     <quality-level-id>:
+#         index        : <index>
+#         videoCodec   : (h264|h265|vp9)
+#         videoBitrate : <bitrate>, # in kBit/s, or threshold for online services
+#         width        : <width>
+#         height       : <height>
+#         fps          : (original|24/25/30|50/60|<fraction>|<fps>)
+#                      # original: don't change FPS, or download with highest framerate for online services
+#                      # 24/25/30 or 50/60: adaptive to SRC framerate
+#                      # <fraction>: must contain a "/"
+#                      # <fps>: in Hz
+qualityLevelList:
+    Q0:
+        index        : 0
+        videoCodec   : h264
+        videoBitrate : 200
+        width        : 192
+        height       : 108
+        fps          : original
+
+    Q4:
+        index        : 4
+        videoCodec   : vp9
+        videoBitrate : 1000
+        width        : 128
+        height       : 72
+        fps          : 50/60
+
+# codingList:
+#     <coding-id>:
+#         type           : (video|audio)
+#         encoder        : (libx264|libx265|libvpx-vp9) or (libfdk_aac|...)
+#         # video only:
+#         passes         : (1|2)
+#         iFrameInterval : <i-frame-interval> # in seconds
+#         bframes        : <number-of-bframes> # optional, only valid for H.264/H.265
+#         scenecut       : <scenecut> # optional, "true" or "false" (default: false)
+#         preset         : <preset> # optional, valid presets for x264, x265, default: "medium"
+#         speed          : <speed> # optional, valid speed for vp9, between 0 and 4, lower is slower, default: 2
+#         quality        : <quality> # optional, valid quality for vp9, "good" or "best", default: "good" (optional for bitmovin encoding)
+#         minrateFactor  : <minrate-factor> # optional, e.g. 1 to say that minrate = bitrate (as specified in quality level)(optional for bitmovin encoding)
+#         maxrateFactor  : <maxrate-factor> # optional, e.g. 1 to say that maxrate = bitrate (as specified in quality level)(optional for bitmovin encoding)
+#         bufsizeFactor  : <bufsize-factor> # optional, e.g. 3 to say that bufsize = 3 * bitrate (as specified in quality level)(optional for bitmovin encoding)
+#         protocol       : <protocol> # mandatory for video streaming services "dash" or "hls"
+#         profile        : <profile> # optional for bitmoving encoding, valid presets: "high" or "main", default: "main" (only for h264)
+#         max_gop        : <maximum nuber of group-of-pictures> # optional for bitmovin encoding (for h264/h265)
+#         min_gop        : <minimum nuber of group-of-pictures> # optional for bitmovin encoding (for h264/h265)
+#         
+#         ...
+#     ...:
+codingList:
+    # specifies encoding options common to all quality levels of one HRC
+    # other encoder defaults will be set in the scripts, not in the test config
+
+    VC3 :
+        type           : video
+        encoder        : youtube
+        protocol       : hls
+    VC4 :
+        type           : video
+        encoder        : bitmovin
+        profile        : main 
+        max_gop        : 7
+        min_gop        : 3
+        minrateFactor  : 0.5
+        maxrateFactor  : 1
+        bufsizeFactor  : 3
+    VC5 :
+        type           : video
+        encoder        : bitmovin
+        quality        : good
+        minrateFactor  : 0.5
+        maxrateFactor  : 1
+        bufsizeFactor  : 3
+
+
+# srcList:
+#     <src-id>: name.avi
+#     <src-id>:
+#         srcFile : name2.avi
+#         youtubeUrl: https://www.youtube.com/watch?v=ySTQk6updjQ
+#     ...
+srcList:
+    # maps SRC IDs to filenames present in the srcVid folder
+    # if there is a srcFile attribute, there must be a youtubeUrl attribute
+    # as well, which will be looked up for HRC processing
+    # <src-id>:     SRC[0-9]{3}
+    SRC000: 10s-video.avi
+    SRC001:
+        srcFile: 10s-video.avi
+        youtubeUrl: https://youtu.be/t6SMVV4OCzw
+
+pvsList:
+    # implicitly maps SRCs and HRCs to PVSes
+    # <database-id>_<src-id>_<hrc-id>
+    # youtube
+    - P2STR00_SRC001_HRC004
+    # bitmovin
+    - P2STR00_SRC000_HRC006
+    - P2STR00_SRC000_HRC005
+
+
+# hrcList:
+#     <hrc-id>:
+#         videoCodingId: <coding-id> # explains which kind of encoding will be used for HRC
+#         audioCodingId: <coding-id> # optional, for long tests
+#         segmentDuration: <segment-duration> # optional, overrides test default
+#         eventList:
+#             - [<quality-level-id>, <duration in seconds>|src_duration]
+#             - [stall, <duration in seconds>]
+#             - ...
+#     ...:
+#         eventList: ...
+hrcList:
+    HRC004:
+        videoCodingId: VC3
+        segmentDuration: 10
+        eventList:
+            - [Q4, 10]
+    HRC005:
+        videoCodingId: VC4
+        segmentDuration: 10
+        eventList:
+            - [Q0, 10]
+    HRC006:
+        videoCodingId: VC5
+        segmentDuration: 10
+        eventList:
+            - [Q4, 10]
+
+
+# postProcessingList:
+#     - type: (pc|mobile|tablet)
+#       displayHeight: <display height>
+#       displayWidth: <display width>
+#     - ...
+postProcessingList:
+    # list of contexts for which this test should generate PVSes
+    - type: pc
+      codingHeight: 216
+      codingWidth: 384
+      displayHeight: 216
+      displayWidth: 384
+    - type: mobile
+      codingHeight: 144
+      codingWidth: 256
+      displayHeight: 160
+      displayWidth: 256
