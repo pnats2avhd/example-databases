@@ -1,0 +1,45 @@
+get_src_info:
+  avg_frame_rate: 60/1
+  bit_rate: '3531223'
+  bits_per_raw_sample: '10'
+  codec_long_name: 'FFmpeg video codec #1'
+  codec_name: ffv1
+  codec_tag: '0x31564646'
+  codec_tag_string: FFV1
+  codec_time_base: 1/60
+  codec_type: video
+  coded_height: 216
+  coded_width: 384
+  display_aspect_ratio: '16:9'
+  disposition:
+    attached_pic: 0
+    clean_effects: 0
+    comment: 0
+    default: 0
+    dub: 0
+    forced: 0
+    hearing_impaired: 0
+    karaoke: 0
+    lyrics: 0
+    original: 0
+    timed_thumbnails: 0
+    visual_impaired: 0
+  duration: '10.000000'
+  duration_ts: 600
+  has_b_frames: 0
+  height: 216
+  index: 0
+  level: -99
+  nb_frames: '600'
+  pix_fmt: yuv444p10le
+  r_frame_rate: 60/1
+  refs: 1
+  sample_aspect_ratio: '1:1'
+  start_pts: 0
+  start_time: '0.000000'
+  time_base: 1/60
+  width: 384
+get_stream_size:
+  a: 0
+  v: 4406672
+md5sum: '-'
