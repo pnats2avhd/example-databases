@@ -16,6 +16,16 @@ Each database is mainly specified by a `.yaml` file that lists:
 - The settings for encoding audio and video
 - The HRC settings for "stitching" together different encodings
 
+Some general definitions:
+
+- A database is a collection of PVSes (Processed Video Sequences)
+- A PVS is a combination of SRC and HRC (Hypothetical Reference Circuit)
+- PVS, SRC and HRC IDs must be unique over all databases (SRC/HRC IDs can be identified across databases)
+- A PVS file processed for being read by a pixel-based model is called AVPVS
+- A PVS file shown in a particular context is a CPVS (Context Processed Video Sequence)
+
+Each database (short and long) must reside in its own folder, where the folder name is equal to the database ID.
+
 See the example YAML files in the respective subfolders.
 
 ## Utilities
