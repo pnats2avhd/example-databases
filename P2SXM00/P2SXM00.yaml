@@ -147,6 +147,9 @@ hrcList:
         segmentDuration: 10
         eventList:
             - [Q0, 10]
+            - [freeze, [5, 0.334]]
+            - [freeze, [6, 0.1667]]
+            - [freeze, [1, 1.1]]
     HRC001:
         videoCodingId: VC1
         segmentDuration: 10
